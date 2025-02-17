@@ -1,0 +1,9 @@
+namespace: staging
+replica: 1
+imageRepository: nginx
+imageTag: "1.18.0"
+configMapName: "version: 1.18.0"
+resources:
+  limits:
+    cpu: 50m
+    memory: 128Mi

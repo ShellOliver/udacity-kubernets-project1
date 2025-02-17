@@ -1,0 +1,10 @@
+namespace: prod
+replica: 2
+imageRepository: nginx
+imageTag: "1.17.0"
+configMapName: "version: 1.17.0"
+servicePort: 80
+resources:
+  limits:
+    cpu: 570m
+    memory: 256Mi

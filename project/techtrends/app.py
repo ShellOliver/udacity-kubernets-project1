@@ -30,38 +30,14 @@ def index():
     connection.close()
     return render_template('index.html', posts=posts)
 
-@app.route('/healthz')
-def get_healthz():
-    response = app.response_class(
-            response=json.dumps({"result":"OK - healthy"}),
-            status=200,
-            mimetype='application/json'
-        )
-    return response
-
-@app.route('/metrics')
-def get_metrics():
-    connection = get_db_connection()
-    post_count = connection.execute('SELECT COUNT(*) FROM posts').fetchone()[0]
-    connection.close()
-
-    response = app.response_class(
-            response=json.dumps({"db_connection_count": sqlite3.dbapi2.threadsafety, "post_count": post_count}),
-            status=200,
-            mimetype='application/json'
-        )
-    return response
-
 # Define how each individual article is rendered 
 # If the post ID is not found a 404 page is shown
 @app.route('/<int:post_id>')
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-      app.logger.debug('Article "%s" not found', post_id)
       return render_template('404.html'), 404
     else:
-      app.logger.debug('Article "%s" retrieved!', post['title'])
       return render_template('post.html', post=post)
 
 # Define the About Us page
