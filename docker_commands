@@ -1,0 +1,41 @@
+## Docker commands used to build the application 
+`docker build -t my-techtrends-app:techtrends .`
+
+## Docker commands used to run the application
+`docker run -p 7111:3111 my-techtrends-app:techtrends`
+
+## Docker commands used to get the application logs
+`docker logs <container_id>`
+
+## Logs from the container running the TechTrends application
+```
+* Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://172.17.0.2:3111/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 758-705-981
+192.168.65.1 - - [17/Feb/2025 21:51:28] "GET /healthz HTTP/1.1" 200 -
+192.168.65.1 - - [17/Feb/2025 21:51:31] "GET /metrics HTTP/1.1" 200 -
+[2025-02-17 21:51:34,722] DEBUG in app: About Us page is retrieved
+192.168.65.1 - - [17/Feb/2025 21:51:34] "GET /about HTTP/1.1" 200 -
+192.168.65.1 - - [17/Feb/2025 21:51:34] "GET /static/css/main.css HTTP/1.1" 304 -
+192.168.65.1 - - [17/Feb/2025 21:51:36] "GET / HTTP/1.1" 200 -
+192.168.65.1 - - [17/Feb/2025 21:51:36] "GET /static/css/main.css HTTP/1.1" 304 -
+192.168.65.1 - - [17/Feb/2025 21:51:39] "GET /create HTTP/1.1" 200 -
+192.168.65.1 - - [17/Feb/2025 21:51:39] "GET /static/css/main.css HTTP/1.1" 304 -
+[2025-02-17 21:51:53,096] DEBUG in app: Article "my new post" was created!
+192.168.65.1 - - [17/Feb/2025 21:51:53] "POST /create HTTP/1.1" 302 -
+192.168.65.1 - - [17/Feb/2025 21:51:53] "GET / HTTP/1.1" 200 -
+192.168.65.1 - - [17/Feb/2025 21:51:53] "GET /static/css/main.css HTTP/1.1" 304 -
+[2025-02-17 21:51:56,173] DEBUG in app: Article "my new post" retrieved!
+192.168.65.1 - - [17/Feb/2025 21:51:56] "GET /7 HTTP/1.1" 200 -
+192.168.65.1 - - [17/Feb/2025 21:51:56] "GET /static/css/main.css HTTP/1.1" 304 -
+[2025-02-17 21:51:59,293] DEBUG in app: Article "777" not found
+192.168.65.1 - - [17/Feb/2025 21:51:59] "GET /777 HTTP/1.1" 404 -
+192.168.65.1 - - [17/Feb/2025 21:51:59] "GET /static/css/main.css HTTP/1.1" 304 -
+```

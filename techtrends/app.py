@@ -67,6 +67,7 @@ def post(post_id):
 # Define the About Us page
 @app.route('/about')
 def about():
+    app.logger.debug('About Us page is retrieved')
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -85,6 +86,7 @@ def create():
             connection.commit()
             connection.close()
 
+            app.logger.debug('Article "%s" was created!', title)
             return redirect(url_for('index'))
 
     return render_template('create.html')
