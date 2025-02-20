@@ -1,13 +1,35 @@
 import sqlite3
+import logging
+import sys
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
 
+# Configure logging
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+
+stderr_handler = logging.StreamHandler(sys.stderr)
+stderr_handler.setLevel(logging.ERROR)
+
+# Set up logging configuration
+logging.basicConfig(level=logging.DEBUG,  # Set the logging level to DEBUG
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        stdout_handler,  # For STDOUT
+                        stderr_handler   # For STDERR
+                    ])
+
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
+# Create a global variable to track database connections
+global_connection_amount = 0  # Initialize the global counter
+
 def get_db_connection():
+    global global_connection_amount  # Declare we want to modify the global variable
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
+    global_connection_amount += 1
     return connection
 
 # Function to get a post using its ID
@@ -46,7 +68,7 @@ def get_metrics():
     connection.close()
 
     response = app.response_class(
-            response=json.dumps({"db_connection_count": sqlite3.dbapi2.threadsafety, "post_count": post_count}),
+            response=json.dumps({"db_connection_count": global_connection_amount, "post_count": post_count}),
             status=200,
             mimetype='application/json'
         )
@@ -58,16 +80,16 @@ def get_metrics():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-      app.logger.debug('Article "%s" not found', post_id)
+      logging.error('Article "%s" not found', post_id)
       return render_template('404.html'), 404
     else:
-      app.logger.debug('Article "%s" retrieved!', post['title'])
+      logging.info('Article "%s" retrieved!', post['title'])
       return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
-    app.logger.debug('About Us page is retrieved')
+    logging.info('About Us page is retrieved')
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -86,7 +108,7 @@ def create():
             connection.commit()
             connection.close()
 
-            app.logger.debug('Article "%s" was created!', title)
+            logging.info('Article "%s" was created!', title)
             return redirect(url_for('index'))
 
     return render_template('create.html')
